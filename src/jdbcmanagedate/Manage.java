@@ -4,6 +4,9 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.sql.*;
 
+/**
+ * 对数据库的一些简单操作
+ */
 public class Manage {
     private String url="jdbc:mysql://localhost:3306/web01?serverTimezone=UTC";
     private String  user="root";
@@ -48,15 +51,21 @@ public class Manage {
         }
     }
 
-    public void insert(int id,String username,String userpwd){
+    /**
+     * 传入对应数据进行添加
+     * @param id
+     * @param userName
+     * @param userPwd
+     */
+    public void insert(int id,String userName,String userPwd){
 
         connection=this.getConnection();
         String sql="insert into user value(?,?,?)";
         try {
             preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setInt(1,id);
-            preparedStatement.setString(2,username);
-            preparedStatement.setString(3,userpwd);
+            preparedStatement.setString(2,userName);
+            preparedStatement.setString(3,userPwd);
             count=preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,6 +75,10 @@ public class Manage {
         }
     }
 
+    /**
+     * 通过传入的id值进行删除操作
+     * @param id
+     */
     public void deleteById(int id){
         connection=this.getConnection();
         String sql="delete from user where id=?";
@@ -81,10 +94,10 @@ public class Manage {
         }
     }
 
-    public void update(String sql ,int id ,String userpwd){
+    public void update(String sql ,int id ,String userPwd){
         try {
             preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,userpwd);
+            preparedStatement.setString(1,userPwd);
             preparedStatement.setInt(2,id);
             count=preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -94,20 +107,36 @@ public class Manage {
             prompt(count);
         }
     }
-    public void updatePwdById(int id ,String userpwd){
+
+    /**
+     * 修改对应id的密码
+     * @param id
+     * @param userPwd
+     */
+    public void updatePwdById(int id ,String userPwd){
         connection=this.getConnection();
         String sql="update user set password=? where id=?";
-       update(sql,id,userpwd);
+       update(sql,id,userPwd);
         close(connection,preparedStatement,resultSet);
     }
 
-    public void updateNameById(int id,String username){
+
+    /**
+     * 修改对应id的用户名
+     * @param id
+     * @param username
+     */
+    public void updateNameById(int id,String userName){
         connection=this.getConnection();
         String sql="update user set username=? where id=?";
-        update(sql,id,username);
+        update(sql,id,userName);
         close(connection,preparedStatement,resultSet);
     }
 
+    /**
+     * 查询对应id的信息并输出
+     * @param id
+     */
     public void selectById(int id){
         connection=this.getConnection();
 
@@ -134,7 +163,10 @@ public class Manage {
         }
     }
 
-    public void selectById(){
+    /**
+     * 查询该表里所有的数据
+     */
+    public void select(){
         connection=this.getConnection();
         String sql="select*from user";
         try {
